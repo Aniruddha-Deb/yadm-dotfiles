@@ -32,7 +32,7 @@ unset __conda_setup
 
 export PATH=~/.local/bin:$PATH
 
-fpath+=($HOME/.local/opt/zsh/pure)
+fpath+=($HOME/.local/share/pure)
 autoload -Uz promptinit
 zstyle :prompt:pure:user show no
 zstyle :prompt:pure:host show no
