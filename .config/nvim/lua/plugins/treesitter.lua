@@ -1,7 +1,7 @@
 return {
   {
-    'nvim-treesitter/nvim-treesitter',
-    build = ':TSUpdate',
+    "nvim-treesitter/nvim-treesitter",
+    build = ":TSUpdate",
     opts = {
       ensure_installed = {
         "markdown",
@@ -14,7 +14,8 @@ return {
         "markdown_inline",
         "javascript",
         "rust",
-        "java"
+        "java",
+        -- you can add "tasktree" here if you want :TSInstall to try
       },
       highlight = {
         enable = true,
@@ -26,11 +27,12 @@ return {
         disable = {},
       },
       autotag = {
-        enable = true
+        enable = true,
       },
     },
     config = function(_, opts)
-      require('nvim-treesitter.configs').setup(opts)
-    end
-  }
+      require("nvim-treesitter.configs").setup(opts)
+    end,
+  },
 }
+

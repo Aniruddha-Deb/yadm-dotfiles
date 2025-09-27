@@ -1,16 +1,22 @@
 return {
   -- Neovim LSP configs
-  'neovim/nvim-lspconfig',
+  {
+    'neovim/nvim-lspconfig',
+    version = "2.1.0"
+  },
   
   -- required plugins for vim-cmp
-  'hrsh7th/cmp-nvim-lsp',
+  {
+    -- see https://github.com/hrsh7th/cmp-nvim-lsp/issues/85
+    'hrsh7th/cmp-nvim-lsp',
+    commit = "39e2eda76828d88b773cc27a3f61d2ad782c922d"
+  },
   'hrsh7th/cmp-buffer',
   'hrsh7th/cmp-path',
   'hrsh7th/cmp-cmdline',
 
   -- a snippet engine (nvim-cmp needs it)
-  'hrsh7th/cmp-vsnip',
-  'hrsh7th/vim-vsnip',
+  'L3MON4D3/LuaSnip',
 
   {
     'hrsh7th/nvim-cmp',
@@ -31,8 +37,8 @@ return {
         snippet = {
           -- REQUIRED - you must specify a snippet engine
           expand = function(args)
-            vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
-            -- require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+            -- vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+            require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
             -- require('snippy').expand_snippet(args.body) -- For `snippy` users.
             -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
           end,
@@ -50,8 +56,8 @@ return {
           ["<Tab>"] = cmp.mapping(function(fallback)
             if cmp.visible() then
               cmp.select_next_item()
-            elseif vim.fn["vsnip#available"](1) == 1 then
-              feedkey("<Plug>(vsnip-expand-or-jump)", "")
+            elseif require("luasnip").expand_or_jumpable() then
+              require("luasnip").expand_or_jump()
             elseif has_words_before() then
               cmp.complete()
             else
@@ -59,18 +65,21 @@ return {
             end
           end, { "i", "s" }),
 
-          ["<S-Tab>"] = cmp.mapping(function()
+          ["<S-Tab>"] = cmp.mapping(function(fallback)
             if cmp.visible() then
               cmp.select_prev_item()
-            elseif vim.fn["vsnip#jumpable"](-1) == 1 then
-              feedkey("<Plug>(vsnip-jump-prev)", "")
+            elseif require("luasnip").jumpable(-1) then
+              require("luasnip").jump(-1)
+            else
+              fallback()
             end
           end, { "i", "s" })
+
         }),
         sources = cmp.config.sources({
           { name = 'nvim_lsp' },
-          { name = 'vsnip' }, -- For vsnip users.
-          -- { name = 'luasnip' }, -- For luasnip users.
+          -- { name = 'vsnip' }, -- For vsnip users.
+          { name = 'luasnip' }, -- For luasnip users.
           -- { name = 'ultisnips' }, -- For ultisnips users.
           -- { name = 'snippy' }, -- For snippy users.
         }, {
