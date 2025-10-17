@@ -4,7 +4,7 @@ return {
     'neovim/nvim-lspconfig',
     version = "2.1.0"
   },
-  
+
   -- required plugins for vim-cmp
   {
     -- see https://github.com/hrsh7th/cmp-nvim-lsp/issues/85
@@ -21,6 +21,7 @@ return {
   {
     'hrsh7th/nvim-cmp',
     config = function(_, opts)
+
       local has_words_before = function()
         unpack = unpack or table.unpack
         local line, col = unpack(vim.api.nvim_win_get_cursor(0))
@@ -33,7 +34,7 @@ return {
 
       local cmp = require('cmp')
 
-      cmp.setup({ 
+      cmp.setup({
         snippet = {
           -- REQUIRED - you must specify a snippet engine
           expand = function(args)
@@ -95,6 +96,8 @@ return {
           { name = 'buffer' },
         })
       })
+
+      cmp.setup.buffer({enabled = function() return vim.bo.ft ~= "markdown" end})
 
       -- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
       cmp.setup.cmdline({ '/', '?' }, {
